@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: portfolio
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/thongnv701/platform-gitops.git
+    targetRevision: main
+    path: k8s/portfolio
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: portfolio
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
