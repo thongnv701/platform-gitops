@@ -5,15 +5,16 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: "placeholder@example.com"  # This will be replaced by the secret
+    email: "thongnv701@gmail.com"  # Update this with your email
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:
     - dns01:
-        route53:
-          region: ap-southeast-1
-          hostedZoneID: "placeholder"  # This will be replaced by the secret
-          accessKeyID: "placeholder"   # This will be replaced by the secret
-          secretAccessKeySecretRef:
-            name: route53-credentials-secret
-            key: secret-access-key 
+        cloudflare:
+          email: "thongnv701@gmail.com"  # Update this with your Cloudflare email
+          apiKeySecretRef:
+            name: cloudflare-api-key
+            key: api-key
+      selector:
+        dnsZones:
+          - "thongit.space"
