@@ -1,0 +1,26 @@
+# Ignore Helm chart build output
+helm/*/charts/
+helm/*/tmp/
+
+# Ignore Kubernetes secrets and sensitive files
+**/secrets.yaml
+**/secret.yaml
+**/secrets/*.yaml
+
+# Ignore local config and IDE files
+*.swp
+*.swo
+*.bak
+*.tmp
+.DS_Store
+.idea/
+.vscode/
+.env
+.env.*
+
+# Ignore logs
+*.log
+logs/
+
+# Ignore OS generated files
+Thumbs.db
