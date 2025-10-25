@@ -6,7 +6,7 @@ metadata:
 spec:
   secretName: portfolio-tls
   issuerRef:
-    name: letsencrypt-prod
+    name: letsencrypt-prod-cloudflare
     kind: ClusterIssuer
   dnsNames:
   - portfolio.thongit.space
