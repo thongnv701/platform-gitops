@@ -6,12 +6,27 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/thongnv701/platform-gitops.git
-    targetRevision: main
-    path: helm/redis
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: redis
+    targetRevision: 18.2.1
     helm:
-      valueFiles:
-        - values.yaml
+      parameters:
+        - name: architecture
+          value: standalone
+        - name: auth.enabled
+          value: "true"
+        - name: master.persistence.enabled
+          value: "true"
+        - name: master.persistence.size
+          value: 8Gi
+        - name: master.service.type
+          value: ClusterIP
+        - name: master.service.ports.redis
+          value: "6379"
+        - name: sentinel.enabled
+          value: "false"
+        - name: metrics.enabled
+          value: "false"
   destination:
     server: https://kubernetes.default.svc
     namespace: redis
