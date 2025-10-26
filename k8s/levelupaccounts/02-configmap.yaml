@@ -4,6 +4,6 @@ metadata:
   name: levelupaccounts-config
   namespace: levelupaccounts
 data:
-  ENVIRONMENT_NAME: "production"
+  ENVIRONMENT_NAME: "prod"
   ASPNETCORE_ENVIRONMENT: "Production"
   DOTNET_ENVIRONMENT: "Production"
