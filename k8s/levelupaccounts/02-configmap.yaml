@@ -7,4 +7,3 @@ data:
   ASPNETCORE_CONFIGURATION_PATH: "/app/config/appsettings.json"
   ENVIRONMENT_NAME: "prod"
   ASPNETCORE_ENVIRONMENT: "Staging"
-  DOTNET_ENVIRONMENT: "Production"
