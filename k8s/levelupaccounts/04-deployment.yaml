@@ -133,5 +133,8 @@ spec:
       volumes:
       - name: config-volume
         emptyDir: {}
+      - name: github-auth
+        secret:
+          secretName: github-auth
       securityContext:
         fsGroup: 1000
