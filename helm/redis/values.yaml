@@ -1,0 +1,128 @@
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+##
+# global:
+#   imageRegistry: myRegistryName
+#   imagePullSecrets:
+#     - myRegistryKeySecretName
+#   storageClass: myStorageClass
+
+## Bitnami Redis image version
+## ref: https://hub.docker.com/r/bitnami/redis/tags/
+##
+image:
+  registry: docker.io
+  repository: bitnami/redis
+  tag: 7.2.4-debian-11-r0
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  # pullSecrets:
+  #   - myRegistryKeySecretName
+
+## String to partially override common.names.fullname template (will maintain the release name)
+##
+# nameOverride:
+
+## String to fully override common.names.fullname template
+##
+# fullnameOverride:
+
+## Redis architecture. Allowed values: standalone or replication
+## ref: https://github.com/bitnami/charts/tree/main/bitnami/redis
+##
+architecture: standalone
+
+## Redis authentication parameters
+auth:
+  enabled: true
+  ## Redis secret already exists
+  ##
+  # existingSecret: ""
+  ## Redis password
+  ## Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true
+  ## ref: https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml#L37-L39
+  ##
+  # password: ""
+  ## Mount REDIS_PASSWORD as a file instead of using an environment variable
+  ##
+  usePasswordFiles: false
+
+## Redis port
+##
+master:
+  # Enable persistence using Persistent Volume Claims
+  # ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  persistence:
+    enabled: true
+    ## Set persistent volume size
+    ##
+    size: 8Gi
+    ## Set persistent volume storage class
+    ##
+    # storageClass: ""
+    ## Set persistent volume access mode
+    ##
+    accessModes:
+      - ReadWriteOnce
+
+  ## Service parameters
+  service:
+    ## Service type
+    ##
+    type: ClusterIP
+    ## Redis service port
+    ##
+    ports:
+      redis: 6379
+    ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    # nodePort: 31000
+    ## Specify the clusterIP value
+    ##
+    # clusterIP: ""
+    ## Specify the loadBalancerIP value
+    ##
+    # loadBalancerIP: ""
+    ## Force load balancer to be internal only
+    ##
+    # loadBalancerSourceRanges: []
+    ## Set the ExternalTrafficPolicy on the service
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    # externalTrafficPolicy: Cluster
+
+## Redis Sentinel configuration
+##
+sentinel:
+  enabled: false
+
+## Redis metrics configuration
+##
+metrics:
+  enabled: false
+
+## Network Policy configuration
+##
+networkPolicy:
+  enabled: false
+
+## Service account for Redis to use
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  # name: ""

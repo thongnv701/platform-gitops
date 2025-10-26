@@ -5,11 +5,16 @@ metadata:
   namespace: portfolio
   labels:
     app: portfolio-app
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3000"
+    prometheus.io/path: "/metrics"
 spec:
   selector:
     app: portfolio-app
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
       targetPort: 3000
   type: ClusterIP
