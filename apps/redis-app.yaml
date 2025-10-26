@@ -14,7 +14,7 @@ spec:
         - name: architecture
           value: standalone
         - name: auth.enabled
-          value: "true"
+          value: "false"
         - name: master.persistence.enabled
           value: "true"
         - name: master.persistence.size
