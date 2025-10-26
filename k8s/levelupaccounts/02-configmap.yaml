@@ -4,6 +4,7 @@ metadata:
   name: levelupaccounts-config
   namespace: levelupaccounts
 data:
+  ASPNETCORE_CONFIGURATION_PATH: "/app/config/appsettings.json"
   ENVIRONMENT_NAME: "prod"
   ASPNETCORE_ENVIRONMENT: "Production"
   DOTNET_ENVIRONMENT: "Production"
