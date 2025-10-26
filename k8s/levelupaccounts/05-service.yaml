@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: levelupaccounts-service
+  namespace: levelupaccounts
+  labels:
+    app.kubernetes.io/name: levelupaccounts-api
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/path: "/metrics"
+spec:
+  selector:
+    app.kubernetes.io/name: levelupaccounts-api
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP

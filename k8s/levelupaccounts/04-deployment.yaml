@@ -1,0 +1,137 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: levelupaccounts-api
+  namespace: levelupaccounts
+  labels:
+    app.kubernetes.io/name: levelupaccounts-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: levelupaccounts-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: levelupaccounts-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      initContainers:
+      - name: fetch-config
+        image: curlimages/curl:latest
+        command: 
+        - /bin/sh
+        - -c
+        - |
+          echo "=== Fetching Configuration for Environment: $ENVIRONMENT_NAME ==="
+          
+          # Check if GitHub token exists
+          if [ ! -f /etc/github/token ]; then
+            echo "❌ GitHub token file not found!"
+            exit 1
+          fi
+          
+          TOKEN=$(cat /etc/github/token)
+          if [ -z "$TOKEN" ]; then
+            echo "❌ GitHub token is empty!"
+            exit 1
+          fi
+          
+          # Test GitHub API access
+          echo "Testing GitHub API access..."
+          AUTH_TEST=$(curl -s -H "Authorization: token $TOKEN" https://api.github.com/user)
+          if echo "$AUTH_TEST" | grep -q '"login"'; then
+            echo "✅ GitHub authentication successful"
+          else
+            echo "❌ GitHub authentication failed"
+            echo "Response: $AUTH_TEST"
+            exit 1
+          fi
+          
+          # Fetch config file
+          echo "Fetching appsettings.json for environment: $ENVIRONMENT_NAME..."
+          curl -f -H "Authorization: token $TOKEN" \
+               -H "Accept: application/vnd.github.v3.raw" \
+               -L "https://api.github.com/repos/thongnv701/secret-key/contents/levelupaccounts/api/$ENVIRONMENT_NAME/appsettings.json" \
+               -o /config/appsettings.json
+               
+          if [ $? -eq 0 ] && [ -f /config/appsettings.json ]; then
+            echo "✅ Config fetched successfully"
+            echo "Config file size: $(wc -c < /config/appsettings.json) bytes"
+          else
+            echo "❌ Failed to fetch config file"
+            exit 1
+          fi
+        env:
+        - name: ENVIRONMENT_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: levelupaccounts-config
+              key: ENVIRONMENT_NAME
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+        - name: github-auth
+          mountPath: /etc/github
+          readOnly: true
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "16Mi"
+          limits:
+            cpu: "50m"
+            memory: "32Mi"
+      containers:
+      - name: api
+        image: thongnv0701/levelupaccounts:latest
+        imagePullPolicy: Always
+        command: ["dotnet"]
+        args: ["LevelUpAccounts.API.dll"]
+        workingDir: /app
+        ports:
+        - containerPort: 8080
+          name: http
+        envFrom:
+        - configMapRef:
+            name: levelupaccounts-config
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+        readinessProbe:
+          httpGet:
+            path: /api/v1/ping
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /api/v1/ping
+            port: 8080
+          initialDelaySeconds: 45
+          periodSeconds: 20
+          timeoutSeconds: 5
+          failureThreshold: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 1000
+          capabilities:
+            drop:
+            - ALL
+      volumes:
+      - name: config-volume
+        emptyDir: {}
+      securityContext:
+        fsGroup: 1000
