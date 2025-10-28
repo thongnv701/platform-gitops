@@ -68,6 +68,7 @@ spec:
         envFrom:
         - configMapRef:
             name: levelup-frontend-config
+            optional: true
         command: ["/bin/sh","-c"]
         args:
         - |
