@@ -85,6 +85,8 @@ spec:
         volumeMounts:
         - name: env-volume
           mountPath: /app/env
+        - name: next-cache
+          mountPath: /app/.next
         resources:
           requests:
             cpu: "100m"
@@ -121,6 +123,8 @@ spec:
       - name: github-auth
         secret:
           secretName: github-auth
+      - name: next-cache
+        emptyDir: {}
       securityContext:
         fsGroup: 1000
 
