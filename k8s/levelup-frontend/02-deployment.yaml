@@ -86,7 +86,7 @@ spec:
         - name: env-volume
           mountPath: /app/env
         - name: next-cache
-          mountPath: /app/.next
+          mountPath: /app/.next/cache
         resources:
           requests:
             cpu: "100m"
