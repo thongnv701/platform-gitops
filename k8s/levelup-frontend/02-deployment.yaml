@@ -77,7 +77,7 @@ spec:
             echo "Sourcing env vars from /app/env/.env";
             set -a; . /app/env/.env; set +a;
           fi
-          exec node .next/standalone/server.js
+          exec node server.js
         workingDir: /app
         ports:
         - containerPort: 3000
