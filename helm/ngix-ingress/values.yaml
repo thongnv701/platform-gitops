@@ -1,16 +1,19 @@
 controller:
+  # Use hostNetwork to bind directly to host ports 80/443 for Cloudflare proxy compatibility
+  hostNetwork: true
+  # Service configuration - ClusterIP is sufficient with hostNetwork
   service:
-    type: NodePort
-    nodePorts:
-      http: 30080
-      https: 30443
+    type: ClusterIP
   admissionWebhooks:
     enabled: true
     patch:
       enabled: true
   config:
+    # Cloudflare proxy compatibility settings
     use-forwarded-headers: "true"
     compute-full-forwarded-for: "true"
+    # Use Cloudflare's real IP header for proper client IP tracking
+    real-ip-header: "CF-Connecting-IP"
     use-proxy-protocol: "false"
     proxy-read-timeout: "180"
     proxy-send-timeout: "180"
