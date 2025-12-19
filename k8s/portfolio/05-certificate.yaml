@@ -9,4 +9,4 @@ spec:
     name: letsencrypt-prod-cloudflare
     kind: ClusterIssuer
   dnsNames:
-  - portfolio1.thongit.space
+  - portfolio.thongit.space
