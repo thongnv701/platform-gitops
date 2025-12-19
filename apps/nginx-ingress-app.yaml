@@ -20,7 +20,7 @@ spec:
           service:
             type: ClusterIP
           admissionWebhooks:
-            enabled: false
+            enabled: true
             patch:
               enabled: true
           config:
