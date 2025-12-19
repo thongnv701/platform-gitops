@@ -13,10 +13,10 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - portfolio1.thongit.space
+    - portfolio.thongit.space
     secretName: portfolio-tls
   rules:
-  - host: portfolio1.thongit.space
+  - host: portfolio.thongit.space
     http:
       paths:
       - path: /
