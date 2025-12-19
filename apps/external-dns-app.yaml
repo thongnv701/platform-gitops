@@ -1,0 +1,132 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: external-dns
+    repoURL: https://kubernetes-sigs.github.io/external-dns/
+    targetRevision: 1.14.0
+    helm:
+      values: |
+        # Provider configuration - Cloudflare
+        provider: cloudflare
+
+        # Cloudflare API Token authentication
+        # The API token should be stored in a Kubernetes secret named 'cloudflare-api-token'
+        # in the external-dns namespace with key 'api-token'
+        cloudflare:
+          apiTokenSecretRef:
+            name: cloudflare-api-token
+            key: api-token
+          proxied: true  # Set to true if you want Cloudflare proxy enabled by default
+
+        # Sources to watch for DNS record creation
+        sources:
+          - ingress
+
+        # Domain filter - only manage DNS records for thongit.space domain
+        domainFilters:
+          - thongit.space
+
+        # Registry configuration - use TXT records to track ownership
+        registry: txt
+        txtOwnerId: "external-dns-thongit-space"
+        txtPrefix: "external-dns-"
+
+        # Policy for DNS record management
+        policy: sync  # sync = create, update, and delete records
+
+        # Logging configuration
+        logLevel: info
+        logFormat: json
+
+        # Image configuration
+        image:
+          repository: registry.k8s.io/external-dns/external-dns
+          tag: v0.14.0
+          pullPolicy: IfNotPresent
+
+        # Resource limits
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi
+
+        # Security context
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65534
+          fsGroup: 65534
+          capabilities:
+            drop:
+              - ALL
+
+        # Pod security context
+        podSecurityContext:
+          fsGroup: 65534
+          runAsNonRoot: true
+          runAsUser: 65534
+
+        # ServiceAccount configuration
+        serviceAccount:
+          create: true
+          name: external-dns
+
+        # RBAC configuration
+        rbac:
+          create: true
+
+        # Replica count
+        replicaCount: 1
+
+        # Health checks
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 7979
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 7979
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+
+        # Metrics configuration (for Prometheus monitoring)
+        metrics:
+          enabled: true
+          serviceMonitor:
+            enabled: true
+            namespace: monitoring
+            additionalLabels:
+              release: prometheus-operator
+
+        # Additional arguments
+        extraArgs:
+          - --events
+          - --interval=1m
+          - --log-format=json
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: external-dns
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+

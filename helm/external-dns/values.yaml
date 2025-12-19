@@ -1,0 +1,128 @@
+# External-DNS Helm Chart Values
+# Provider: Cloudflare
+# Source: Ingress resources
+
+# Image configuration
+image:
+  repository: registry.k8s.io/external-dns/external-dns
+  tag: v0.14.0
+  pullPolicy: IfNotPresent
+
+# Provider configuration - Cloudflare
+provider: cloudflare
+
+# Cloudflare API Token authentication
+# The API token should be stored in a Kubernetes secret named 'cloudflare-api-token'
+# in the external-dns namespace with key 'api-token'
+cloudflare:
+  apiTokenSecretRef:
+    name: cloudflare-api-token
+    key: api-token
+  proxied: false  # Set to true if you want Cloudflare proxy enabled by default
+
+# Sources to watch for DNS record creation
+sources:
+  - ingress
+
+# Domain filter - only manage DNS records for thongit.space domain
+domainFilters:
+  - thongit.space
+
+# Registry configuration - use TXT records to track ownership
+registry: txt
+txtOwnerId: "external-dns-thongit-space"
+txtPrefix: "external-dns-"
+
+# Policy for DNS record management
+policy: sync  # sync = create, update, and delete records
+
+# Logging configuration
+logLevel: info
+logFormat: json
+
+# Resource limits
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+# Security context
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 65534
+  fsGroup: 65534
+  capabilities:
+    drop:
+      - ALL
+
+# Pod security context
+podSecurityContext:
+  fsGroup: 65534
+  runAsNonRoot: true
+  runAsUser: 65534
+
+# ServiceAccount configuration
+serviceAccount:
+  create: true
+  name: external-dns
+  annotations: {}
+
+# RBAC configuration
+rbac:
+  create: true
+  apiVersion: v1
+
+# Pod annotations
+podAnnotations: {}
+
+# Node selector, tolerations, and affinity
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# Replica count
+replicaCount: 1
+
+# Update strategy
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+
+# Health checks
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: 7979
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /healthz
+    port: 7979
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+# Metrics configuration (optional, for Prometheus monitoring)
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    namespace: monitoring
+    additionalLabels:
+      release: prometheus-operator
+
+# Additional arguments
+extraArgs:
+  - --events
+  - --interval=1m
+  - --log-format=json
+
