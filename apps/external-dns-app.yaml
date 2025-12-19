@@ -118,7 +118,6 @@ spec:
         # Additional arguments
         extraArgs:
           - --events
-          - --log-format=json
   destination:
     server: https://kubernetes.default.svc
     namespace: external-dns

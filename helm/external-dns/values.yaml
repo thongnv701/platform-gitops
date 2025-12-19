@@ -123,5 +123,4 @@ metrics:
 # Additional arguments
 extraArgs:
   - --events
-  - --log-format=json
 
