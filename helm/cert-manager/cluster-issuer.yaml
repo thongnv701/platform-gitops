@@ -5,16 +5,20 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: "thongnv701@gmail.com"  # Update this with your email
+    email: "thongnv701@gmail.com"
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:
+    # HTTP-01 solver for nginx ingress (primary method)
+    - http01:
+        ingress:
+          class: nginx
+    # DNS-01 solver for Cloudflare (for wildcard certs if needed)
     - dns01:
         cloudflare:
-          email: "thongnv701@gmail.com"  # Update this with your Cloudflare email
-          apiKeySecretRef:
-            name: cloudflare-api-key
-            key: api-key
+          apiTokenSecretRef:
+            name: cloudflare-api-token
+            key: api-token
       selector:
         dnsZones:
           - "thongit.space"
