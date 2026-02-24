@@ -90,7 +90,7 @@ spec:
         image: thongnv0701/myfinance-backend:latest
         imagePullPolicy: Always
         command: ["dotnet"]
-        args: ["MyFinance.API.dll"]
+        args: ["Acme.API.dll"]
         workingDir: /app
         ports:
         - containerPort: 8080
