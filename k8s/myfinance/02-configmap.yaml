@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myfinance-config
+  namespace: myfinance
+data:
+  ASPNETCORE_CONFIGURATION_PATH: "/app/config/appsettings.json"
+  ENVIRONMENT_NAME: "dev"
+  ASPNETCORE_ENVIRONMENT: "Staging"

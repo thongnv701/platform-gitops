@@ -9,16 +9,7 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:
-    # HTTP-01 solver for nginx ingress (primary method)
+    # HTTP-01 solver for nginx ingress (default for all domains)
     - http01:
         ingress:
           class: nginx
-    # DNS-01 solver for Cloudflare (for wildcard certs if needed)
-    - dns01:
-        cloudflare:
-          apiTokenSecretRef:
-            name: cloudflare-api-token
-            key: api-token
-      selector:
-        dnsZones:
-          - "thongit.space"

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myfinance-frontend-config
+  namespace: myfinance-frontend
+data:
+  BACKEND_API_URL: "https://api-myfinance.thongit.space"

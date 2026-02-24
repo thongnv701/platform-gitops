@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: myfinance-thongit-space
+  namespace: myfinance-frontend
+spec:
+  secretName: myfinance-thongit-space-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - myfinance.thongit.space
