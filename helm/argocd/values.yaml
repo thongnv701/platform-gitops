@@ -1,5 +1,5 @@
 global:
-  domain: argocd.thongit.space
+  domain: argocd.thongit.site
 
 fullnameOverride: argocd
 
@@ -45,17 +45,17 @@ server:
       nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
       cert-manager.io/cluster-issuer: "letsencrypt-prod"
     hosts:
-      - argocd.thongit.space
+      - argocd.thongit.site
     paths:
       - /
     tls:
       - hosts:
-          - argocd.thongit.space
+          - argocd.thongit.site
         secretName: argocd-tls
 
 configs:
   cm:
-    url: https://argocd.thongit.space
+    url: https://argocd.thongit.site
     exec.enabled: true
     admin.enabled: true
 

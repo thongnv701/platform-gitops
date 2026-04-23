@@ -9,4 +9,4 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-  - api-myfinance.thongit.space
+  - api-myfinance.thongit.site

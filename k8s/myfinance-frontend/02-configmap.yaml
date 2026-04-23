@@ -4,4 +4,4 @@ metadata:
   name: myfinance-frontend-config
   namespace: myfinance-frontend
 data:
-  BACKEND_API_URL: "https://api-myfinance.thongit.space"
+  BACKEND_API_URL: "https://api-myfinance.thongit.site"

@@ -12,10 +12,10 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - shopacc.thongit.space
+    - shopacc.thongit.site
     secretName: shopacc-thongit-space-tls
   rules:
-  - host: shopacc.thongit.space
+  - host: shopacc.thongit.site
     http:
       paths:
       - path: /

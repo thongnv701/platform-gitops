@@ -4,7 +4,7 @@ This directory contains the Helm values configuration for External-DNS, which au
 
 ## Prerequisites
 
-- Cloudflare account with access to the `thongit.space` domain
+- Cloudflare account with access to the `thongit.site` domain
 - Kubernetes cluster with ArgoCD installed
 - kubectl configured to access your cluster
 
@@ -19,7 +19,7 @@ This directory contains the Helm values configuration for External-DNS, which au
    - **Zone** → **Zone** → **Read**
    - **Zone** → **DNS** → **Edit**
 5. Set **Zone Resources** to:
-   - **Include** → **Specific zone** → `thongit.space`
+   - **Include** → **Specific zone** → `thongit.site`
 6. Click **Continue to summary** and then **Create Token**
 7. **Copy the API token immediately** (you won't be able to see it again)
 
@@ -80,9 +80,9 @@ kubectl get secret cloudflare-api-token -n external-dns
 
 3. Verify DNS records are being created in Cloudflare dashboard or via DNS lookup:
    ```bash
-   dig shopacc.thongit.space
-   dig api.thongit.space
-   dig portfolio.thongit.space
+   dig shopacc.thongit.site
+   dig api.thongit.site
+   dig portfolio.thongit.site
    ```
 
 ## How It Works
@@ -95,7 +95,7 @@ External-DNS watches for Kubernetes Ingress resources and automatically:
 
 ### Domain Filtering
 
-External-DNS is configured to only manage DNS records for the `thongit.space` domain. Any Ingress resources with hosts in this domain will automatically get DNS records created.
+External-DNS is configured to only manage DNS records for the `thongit.site` domain. Any Ingress resources with hosts in this domain will automatically get DNS records created.
 
 ### Ownership Tracking
 
@@ -110,7 +110,7 @@ External-DNS uses TXT records to track which DNS records it manages:
 
 - **Provider**: Cloudflare
 - **Source**: Ingress resources
-- **Domain Filter**: `thongit.space`
+- **Domain Filter**: `thongit.site`
 - **Policy**: `sync` (create, update, delete)
 - **Registry**: TXT records for ownership tracking
 - **Sync Interval**: 1 minute
@@ -159,7 +159,7 @@ To modify External-DNS configuration:
    - DNS:Edit
 
 4. Check if domain filter matches your domain:
-   - Current filter: `thongit.space`
+   - Current filter: `thongit.site`
    - Ingress hosts must match this domain
 
 ### DNS Records Being Deleted

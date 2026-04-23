@@ -29,9 +29,9 @@ env:
 sources:
   - ingress
 
-# Domain filter - only manage DNS records for thongit.space domain
+# Domain filter - only manage DNS records for thongit.site domain
 domainFilters:
-  - thongit.space
+  - thongit.site
 
 # Registry configuration - use TXT records to track ownership
 registry: txt

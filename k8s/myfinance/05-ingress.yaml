@@ -13,7 +13,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: api-myfinance.thongit.space
+  - host: api-myfinance.thongit.site
     http:
       paths:
       - path: /
@@ -25,5 +25,5 @@ spec:
               number: 80
   tls:
   - hosts:
-    - api-myfinance.thongit.space
+    - api-myfinance.thongit.site
     secretName: api-myfinance-thongit-space-tls

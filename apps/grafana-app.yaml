@@ -15,10 +15,10 @@ spec:
           enabled: true
           ingressClassName: nginx
           hosts:
-            - grafana.thongit.space
+            - grafana.thongit.site
           # tls:  # Using ALB/ACM termination instead
           #   - hosts:
-          #       - grafana.thongit.space
+          #       - grafana.thongit.site
           #     secretName: grafana-tls
           annotations:
             nginx.ingress.kubernetes.io/ssl-redirect: "true"

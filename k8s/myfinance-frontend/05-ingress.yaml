@@ -12,10 +12,10 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - myfinance.thongit.space
+    - myfinance.thongit.site
     secretName: myfinance-thongit-space-tls
   rules:
-  - host: myfinance.thongit.space
+  - host: myfinance.thongit.site
     http:
       paths:
       - path: /
